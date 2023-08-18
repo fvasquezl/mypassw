@@ -1,8 +1,13 @@
 import type { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { connect } from "@/database/mongo.config";
+import { User } from "@/model/User";
 
 export const authOptions: NextAuthOptions = {
+  pages: {
+    signIn: "/login",
+  },
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID as string,
@@ -23,11 +28,11 @@ export const authOptions: NextAuthOptions = {
         },
       },
       async authorize(credentials, req) {
-        const user = {
-          id: "1",
-          name: "FVasquez",
+        connect();
+
+        const user = await User.findOne({
           email: credentials?.email,
-        };
+        });
         if (user) {
           return user;
         }

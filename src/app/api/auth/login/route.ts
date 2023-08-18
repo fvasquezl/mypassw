@@ -32,7 +32,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           status: 400,
-          message: "Please check your credentials",
+          errror: {
+            email: "Please check your credentials",
+          },
         },
         { status: 200 }
       );
@@ -47,7 +49,6 @@ export async function POST(request: NextRequest) {
         { status: 200 }
       );
     }
-    return NextResponse.json(output);
   } catch (error) {
     if (error instanceof errors.E_VALIDATION_ERROR) {
       return NextResponse.json(
