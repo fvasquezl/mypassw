@@ -8,6 +8,25 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/login",
   },
+
+  callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      try {
+        connect();
+
+        const findUser = await User.findOne({ email: user.email });
+        if (findUser) {
+          return true;
+        }
+        await User.create({ name: user.name, email: user.email });
+        return true;
+      } catch (error) {
+        console.log("Sign In error", error);
+        return false;
+      }
+    },
+  },
+
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID as string,
