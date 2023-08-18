@@ -3,8 +3,10 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 
 export default function Login() {
+  const params = useSearchParams();
   const [authState, setAuthState] = useState({
     email: "",
     password: "",
